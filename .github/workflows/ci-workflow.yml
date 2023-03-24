@@ -115,6 +115,16 @@ jobs:
           --fail-fast
           -P contrib-check
           -P include-grpc
+      - name: 'Compilation'
+        run: |
+           mvn clean install -DskipTests -pl nifi-nar-bundles/nifi-standard-bundle/nifi-standard-processors -am
+      - name: 'Run Test without  NonDex'
+        run: |
+          mvn -pl nifi-nar-bundles/nifi-standard-bundle/nifi-standard-processors test -Dtest=org.apache.nifi.processors.standard.TestListenHTTP#testMultipartFormDataRequest
+      - name: 'Run Test with NonDex'
+        run: |
+           mvn -pl nifi-nar-bundles/nifi-standard-bundle/nifi-standard-processors edu.illinois:nondex-maven-plugin:2.1.1:nondex -Dtest=org.apache.nifi.processors.standard.TestListenHTTP#testMultipartFormDataRequest
+  
 
   ubuntu-build-en:
     timeout-minutes: 120
